@@ -61,7 +61,7 @@ angular.module('documents', ['ngResource', 'ngRoute'])
                     $scope.compareList.splice($scope.compareList.indexOf(added), 1);
                 } else {
                     $scope.initComparator(doc);
-                    if($scope.compareList.length > 1) {
+                    if ($scope.compareList.length > 1) {
                         $scope.tab = 'COMPARATOR';
                     }
                 }
@@ -71,11 +71,10 @@ angular.module('documents', ['ngResource', 'ngRoute'])
                 var newDoc = {};
                 newDoc.doc = doc;
                 newDoc.firstLine = 0;
-                newDoc.lastLine = 20;
                 newDoc.totalLines = 0;
                 newDoc.content = [];
                 $scope.compareList.push(newDoc);
-                $scope.loadPartForDocument(newDoc, 20);
+                $scope.loadPartForDocument(newDoc, newDoc.firstLine, 10);
             };
 
             $scope.getAddedDoc = function (doc) {
@@ -88,13 +87,14 @@ angular.module('documents', ['ngResource', 'ngRoute'])
                 return addedDoc;
             };
 
-            $scope.loadPartForDocument = function (newDoc, linesCount) {
+            $scope.loadPartForDocument = function (newDoc, firstLine, linesCount) {
                 versionsResource.getParagraph({
                     id: newDoc.doc.id,
-                    paragraphNumber: newDoc.firstLine,
+                    paragraphNumber: firstLine,
                     linesCount: linesCount
                 }, function (lines) {
                     newDoc.content = newDoc.content.concat(lines);
+                    newDoc.totalLines += lines.length;
                 });
             };
 
@@ -121,4 +121,19 @@ angular.module('documents', ['ngResource', 'ngRoute'])
 
             $scope.init();
 
-        }]);
+        }])
+
+    .directive('handleScroll', function () {
+        return {
+            restrict: 'A',
+            link: function (scope, element, attrs) {
+
+                var doc = element[0];
+                $(doc).bind("scroll", function () {
+                    if (doc.scrollTop + doc.offsetHeight >= doc.scrollHeight) {
+                        scope.$apply(attrs.handleScroll);
+                    }
+                });
+            }
+        };
+    });
