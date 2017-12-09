@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS document_versions;
+DROP TABLE IF EXISTS documents;
 CREATE TABLE IF NOT EXISTS documents (
 
   id BIGSERIAL NOT NULL,
@@ -11,6 +13,7 @@ CREATE TABLE IF NOT EXISTS documents (
 CREATE TABLE IF NOT EXISTS document_versions (
 
   id BIGSERIAL NOT NULL,
+  version BIGINT,
   document_id BIGINT NOT NULL,
   document_version VARCHAR(255),
   description VARCHAR(1024),

@@ -65,6 +65,8 @@ angular.module('documents', ['ngResource', 'ngRoute'])
                         $scope.tab = 'COMPARATOR';
                     }
                 }
+
+                $scope.initMasterSlaveScroll();
             };
 
             $scope.initComparator = function (doc) {
@@ -95,6 +97,21 @@ angular.module('documents', ['ngResource', 'ngRoute'])
                 }, function (lines) {
                     newDoc.content = newDoc.content.concat(lines);
                     newDoc.totalLines += lines.length;
+                });
+            };
+
+            $scope.initMasterSlaveScroll = function () {
+                elements.on('scroll', function(e){
+                    if(e.isTrigger){
+                        e.target.scrollLeft = scrollLeft;
+                    }else {
+                        scrollLeft = e.target.scrollLeft;
+                        elements.each(function (element) {
+                            if( !this.isSameNode(e.target) ){
+                                $(this).trigger('scroll');
+                            }
+                        });
+                    }
                 });
             };
 

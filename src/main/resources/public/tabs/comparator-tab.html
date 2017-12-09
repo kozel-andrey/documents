@@ -1,7 +1,7 @@
 <div ng-if="tab == 'COMPARATOR'">
-    <div class="row">
+    <div class="row" id="comparator_tab_id">
         <div class="col-md-6" ng-repeat="doc in compareList">
-            <div class="panel panel-success" style="margin-top: 40px">
+            <div class="panel panel-success master-slave" style="margin-top: 40px">
                 <div class="panel-heading">
                     {{doc.doc.description}}
                 </div>
