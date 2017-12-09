@@ -29,8 +29,9 @@ public class DocumentVersionController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}/paragraph")
     public List<String> getParagraph(@PathVariable("id") Long id,
-                               @RequestParam("paragraphNumber") Integer paragraphNumber) {
-        return versionsRepository.findParagraph(id, paragraphNumber);
+                                     @RequestParam("paragraphNumber") Integer paragraphNumber,
+                                     @RequestParam("linesCount") Integer linesCount) {
+        return versionsRepository.findParagraph(id, paragraphNumber, linesCount);
     }
 
 

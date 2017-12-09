@@ -18,12 +18,14 @@ public class DocumentVersionsRepositoryImpl implements DocumentVersionRepository
     private EntityManager em;
 
     @Override
-    public List<String> findParagraph(Long id, Integer paragraphNumber) {
+    public List<String> findParagraph(Long id, Integer paragraphNumber, Integer linesCount) {
         StoredProcedureQuery getParagraph = em.createStoredProcedureQuery("get_part_of_text");
         getParagraph.registerStoredProcedureParameter(1, Long.class, ParameterMode.IN);
         getParagraph.registerStoredProcedureParameter(2, Integer.class, ParameterMode.IN);
+        getParagraph.registerStoredProcedureParameter(3, Integer.class, ParameterMode.IN);
         getParagraph.setParameter(1, id);
         getParagraph.setParameter(2, paragraphNumber);
+        getParagraph.setParameter(3, linesCount);
         getParagraph.execute();
         List<Object> strings = getParagraph.getResultList();
         return strings.stream().map(Object::toString).collect(Collectors.toList());

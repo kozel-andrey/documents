@@ -5,8 +5,8 @@
                 <div class="panel-heading">
                     {{doc.doc.description}}
                 </div>
-                <div class="panel-body">
-
+                <div class="panel-body group-scrolling" style="max-height: 300px; overflow-y:scroll;">
+                    <div ng-repeat="paragraph in doc.content track by $index">{{paragraph}}</div>
                 </div>
             </div>
         </div>

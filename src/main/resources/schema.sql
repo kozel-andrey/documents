@@ -21,16 +21,10 @@ CREATE TABLE IF NOT EXISTS document_versions (
 
 );
 
-CREATE OR REPLACE FUNCTION get_part_of_text(version_id BIGINT, paragraph_number INTEGER)
-  RETURNS TEXT [] LANGUAGE 'plpgsql' AS
+CREATE OR REPLACE FUNCTION get_part_of_text(version_id BIGINT, paragraph_number INTEGER, lines_count INTEGER)
+  RETURNS SETOF TEXT LANGUAGE 'plpgsql' AS
 '
-DECLARE
-  arr TEXT[];
 BEGIN
-
-  SELECT INTO arr regexp_split_to_array(content :: TEXT, E''\\s+'') FROM document_versions dv WHERE dv.id = version_id LIMIT 1 OFFSET paragraph_number;
-
-  RETURN arr;
-
+  RETURN QUERY SELECT regexp_split_to_table(content :: TEXT, ''\\n'') FROM document_versions dv WHERE dv.id = version_id LIMIT lines_count OFFSET paragraph_number;
 END
 ';

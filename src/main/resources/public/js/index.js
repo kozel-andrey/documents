@@ -19,7 +19,8 @@ angular.module('documents', ['ngResource', 'ngRoute'])
             },
             'getParagraph': {
                 method: 'GET',
-                url: endpoint + '/:id/paragraph'
+                url: endpoint + '/:id/paragraph',
+                isArray: true
             }
         });
     }])
@@ -60,6 +61,9 @@ angular.module('documents', ['ngResource', 'ngRoute'])
                     $scope.compareList.splice($scope.compareList.indexOf(added), 1);
                 } else {
                     $scope.initComparator(doc);
+                    if($scope.compareList.length > 1) {
+                        $scope.tab = 'COMPARATOR';
+                    }
                 }
             };
 
@@ -71,7 +75,7 @@ angular.module('documents', ['ngResource', 'ngRoute'])
                 newDoc.totalLines = 0;
                 newDoc.content = [];
                 $scope.compareList.push(newDoc);
-                $scope.loadPartForDocument(newDoc);
+                $scope.loadPartForDocument(newDoc, 20);
             };
 
             $scope.getAddedDoc = function (doc) {
@@ -84,9 +88,13 @@ angular.module('documents', ['ngResource', 'ngRoute'])
                 return addedDoc;
             };
 
-            $scope.loadPartForDocument = function (newDoc) {
-                versionsResource.getParagraph({id: newDoc.doc.id, paragraphNumber: newDoc.firstLine}, function (lines) {
-                    newDoc.content.push(lines);
+            $scope.loadPartForDocument = function (newDoc, linesCount) {
+                versionsResource.getParagraph({
+                    id: newDoc.doc.id,
+                    paragraphNumber: newDoc.firstLine,
+                    linesCount: linesCount
+                }, function (lines) {
+                    newDoc.content = newDoc.content.concat(lines);
                 });
             };
 

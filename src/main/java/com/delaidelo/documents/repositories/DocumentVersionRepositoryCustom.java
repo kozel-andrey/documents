@@ -9,6 +9,6 @@ import java.util.List;
  */
 public interface DocumentVersionRepositoryCustom {
 
-    List<String> findParagraph(Long id, Integer paragraphNumber);
+    List<String> findParagraph(Long id, Integer paragraphNumber, Integer linesCount);
 
 }
