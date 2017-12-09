@@ -16,6 +16,10 @@ angular.module('documents', ['ngResource', 'ngRoute'])
                 method: 'GET',
                 url: endpoint + '/:id/by-document',
                 isArray: true
+            },
+            'getParagraph': {
+                method: 'GET',
+                url: endpoint + '/:id/paragraph'
             }
         });
     }])
@@ -23,50 +27,89 @@ angular.module('documents', ['ngResource', 'ngRoute'])
     .controller('documentsController', ['$scope', 'documentsResource', 'versionsResource',
         function ($scope, documentsResource, versionsResource) {
 
-        // INITIALIZATION
-        $scope.init = function () {
-            $scope.getDocuments();
-            $scope.selectedDocument = undefined;
-            $scope.versions = [];
-            $scope.compareList = [];
-            $scope.tab = 'DOCUMENTS';
-        };
+            // INITIALIZATION
+            $scope.init = function () {
+                $scope.getDocuments();
+                $scope.selectedDocument = undefined;
+                $scope.versions = [];
+                $scope.compareList = [];
+                $scope.tab = 'DOCUMENTS';
+            };
 
-        $scope.getDocuments = function () {
-            documentsResource.query(function (documents) {
-                $scope.documents = documents;
-            });
-        };
+            $scope.getDocuments = function () {
+                documentsResource.query(function (documents) {
+                    $scope.documents = documents;
+                });
+            };
 
-        $scope.getClass = function(tabName) {
-            return $scope.tab == tabName ? 'active' : '';
-        };
+            $scope.getClass = function (tabName) {
+                return $scope.tab == tabName ? 'active' : '';
+            };
 
-        $scope.selectTab = function (tabName) {
-            $scope.tab = tabName;  
-        };
-        
-        $scope.getVersions = function (doc) {
-            $scope.selectedDocument = doc;
-            versionsResource.getByDocument({id: doc.id}, function (versions) {
-                $scope.versions = versions;
-            });
-        };
-        
-        $scope.isActive = function (tabName) {
-            switch(tabName) {
-                case 'DOCUMENTS': {
-                    return $scope.selectedDocument == undefined;
+            $scope.getVersions = function (doc) {
+                $scope.selectedDocument = doc;
+                versionsResource.getByDocument({id: doc.id}, function (versions) {
+                    $scope.versions = versions;
+                    $scope.tab = 'VERSIONS'
+                });
+            };
+
+            $scope.addToCompare = function (doc) {
+                var added = $scope.getAddedDoc(doc);
+                if (added) {
+                    $scope.compareList.splice($scope.compareList.indexOf(added), 1);
+                } else {
+                    initComparator(doc);
                 }
-                case 'VERSIONS': {
-                    return $scope.versions.length > 0;
-                }
-                case 'COMPARATOR': {
-                    return $scope.compareList.length > 0;
-                }
-            }  
-        };
-        
-        $scope.init();
+            };
 
-    }]);
+            $scope.initComparator = function () {
+                var newDoc = {};
+                newDoc.doc = doc;
+                newDoc.firstLine = 0;
+                newDoc.lastLine = 20;
+                newDoc.totalLines = 0;
+                newDoc.content = [];
+                $scope.compareList.push(newDoc);
+            };
+
+            $scope.getAddedDoc = function (doc) {
+                var addedDoc = undefined;
+
+                angular.forEach($scope.compareList, function (added) {
+                    if (added.doc.id == doc.id) addedDoc = added;
+                });
+
+                return addedDoc;
+            };
+
+            $scope.loadPartForDocument = function (doc) {
+                versionsResource.getParagraph({id: doc.id, paragraphNumber: doc.paragraph}, function (line) {
+
+                });
+            };
+
+            $scope.selectTab = function (tabName) {
+                $scope.tab = tabName;
+            };
+
+            $scope.isActive = function (tabName) {
+                switch (tabName) {
+                    case 'DOCUMENTS':
+                    {
+                        return $scope.selectedDocument == undefined;
+                    }
+                    case 'VERSIONS':
+                    {
+                        return $scope.versions.length > 0;
+                    }
+                    case 'COMPARATOR':
+                    {
+                        return $scope.compareList.length > 0;
+                    }
+                }
+            };
+
+            $scope.init();
+
+        }]);

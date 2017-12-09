@@ -5,8 +5,17 @@ package com.delaidelo.documents.dto;
  */
 public class DocumentVersionDto {
 
+    private Long id;
     private String documentVersion;
-    private String desccription;
+    private String description;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getDocumentVersion() {
         return documentVersion;
@@ -16,11 +25,11 @@ public class DocumentVersionDto {
         this.documentVersion = documentVersion;
     }
 
-    public String getDesccription() {
-        return desccription;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDesccription(String desccription) {
-        this.desccription = desccription;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

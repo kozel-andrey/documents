@@ -1,3 +1,27 @@
-<div ng-if="tab == 'VERSIONS'">
-    Версии
+<div ng-if="tab == 'VERSIONS'" class="panel panel-warning" style="margin-top: 40px">
+    <div class="panel-heading">
+        Версии
+    </div>
+    <table class="table table-bordered table-responsive">
+        <tr>
+            <th>Id</th>
+            <th>Версия</th>
+            <th>Описание</th>
+            <th>Сравнить</th>
+        </tr>
+        <tr ng-repeat="version in versions">
+            <td>
+                {{version.id}}
+            </td>
+            <td>
+                {{version.documentVersion}}
+            </td>
+            <td>
+                {{version.description}}
+            </td>
+            <td>
+                <input type="checkbox" ng-checked="getAddedDoc(version) != undefined" ng-click="addToCompare(version)">
+            </td>
+        </tr>
+    </table>
 </div>

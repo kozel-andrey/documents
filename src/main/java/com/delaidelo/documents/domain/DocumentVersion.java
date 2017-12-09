@@ -51,7 +51,8 @@ public class DocumentVersion extends AbstractEntity {
 
     public DocumentVersionDto getDto() {
         DocumentVersionDto dto = new DocumentVersionDto();
-        dto.setDesccription(description);
+        dto.setId(getId());
+        dto.setDescription(description);
         dto.setDocumentVersion(documentVersion);
         return dto;
     }

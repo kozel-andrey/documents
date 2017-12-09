@@ -1,3 +1,14 @@
 <div ng-if="tab == 'COMPARATOR'">
-    Сравнялочка
+    <div class="row">
+        <div class="col-md-6" ng-repeat="doc in compareList">
+            <div class="panel panel-success" style="margin-top: 40px">
+                <div class="panel-heading">
+                    {{doc.doc.description}}
+                </div>
+                <div class="panel-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
