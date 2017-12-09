@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+    <title>Документы</title>
+    <link href="css/angular-bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+        [ng\:cloak], [ng-cloak], .ng-cloak {
+            display: none !important;
+        }
+    </style>
+    <meta charset="utf-8">
+</head>
+
+<body ng-app="documents" ng-controller="documentsController">
+    <div class="container ng-cloak" ng-cloak>
+        <h1 class="text-center">Документы</h1>
+        <ul class="nav nav-tabs">
+            <li role="presentation" ng-class="getClass('DOCUMENTS')"
+                ng-click="selectTab('DOCUMENTS')"><a href="#">Документы</a></li>
+            <li role="presentation" ng-class="getClass('VERSIONS')"
+                ng-click="selectTab('VERSIONS')"><a href="#">Версии</a></li>
+            <li role="presentation" ng-class="getClass('COMPARATOR')"
+                ng-click="selectTab('COMPARATOR')"><a href="#">Сравнение</a></li>
+        </ul>
+        <ng-include src="'tabs/documents-tab.html'"></ng-include>
+        <ng-include src="'tabs/versions-tab.html'"></ng-include>
+        <ng-include src="'tabs/comparator-tab.html'"></ng-include>
+    </div>
+    <script src="js/angular-bootstrap.js" type="text/javascript"></script>
+    <script src="js/index.js"></script>
+</body>
+</html>

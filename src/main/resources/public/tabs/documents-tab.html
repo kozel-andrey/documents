@@ -1,0 +1,25 @@
+<div ng-if="tab == 'DOCUMENTS'" class="panel panel-primary" style="margin-top: 40px">
+    <div class="panel-heading">
+        Документы
+    </div>
+    <table class="table table-bordered table-responsive">
+        <tr>
+            <th>Id</th>
+            <th>Название документа</th>
+            <th>Просмотр</th>
+        </tr>
+        <tr ng-repeat="doc in documents">
+            <td>
+                {{doc.id}}
+            </td>
+            <td>
+                {{doc.title}}
+            </td>
+            <td>
+                <button type="submit" class="btn btn-primary" ng-click="getVersions(doc)">
+                    +
+                </button>
+            </td>
+        </tr>
+    </table>
+</div>
