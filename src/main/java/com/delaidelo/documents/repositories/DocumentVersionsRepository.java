@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by andrew on 09.12.17.
  */
-public interface DocumentVersionsRepository extends PagingAndSortingRepository<DocumentVersion, Long> {
+public interface DocumentVersionsRepository extends PagingAndSortingRepository<DocumentVersion, Long>, DocumentVersionRepositoryCustom {
 
     List<DocumentVersion> findByDocumentId(Long id);
 

@@ -59,11 +59,11 @@ angular.module('documents', ['ngResource', 'ngRoute'])
                 if (added) {
                     $scope.compareList.splice($scope.compareList.indexOf(added), 1);
                 } else {
-                    initComparator(doc);
+                    $scope.initComparator(doc);
                 }
             };
 
-            $scope.initComparator = function () {
+            $scope.initComparator = function (doc) {
                 var newDoc = {};
                 newDoc.doc = doc;
                 newDoc.firstLine = 0;
@@ -71,6 +71,7 @@ angular.module('documents', ['ngResource', 'ngRoute'])
                 newDoc.totalLines = 0;
                 newDoc.content = [];
                 $scope.compareList.push(newDoc);
+                $scope.loadPartForDocument(newDoc);
             };
 
             $scope.getAddedDoc = function (doc) {
@@ -83,9 +84,9 @@ angular.module('documents', ['ngResource', 'ngRoute'])
                 return addedDoc;
             };
 
-            $scope.loadPartForDocument = function (doc) {
-                versionsResource.getParagraph({id: doc.id, paragraphNumber: doc.paragraph}, function (line) {
-
+            $scope.loadPartForDocument = function (newDoc) {
+                versionsResource.getParagraph({id: newDoc.doc.id, paragraphNumber: newDoc.firstLine}, function (lines) {
+                    newDoc.content.push(lines);
                 });
             };
 
