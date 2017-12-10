@@ -4,11 +4,13 @@
 
 angular.module('documents', ['ngResource', 'ngRoute'])
 
+    //Factory for getting list of documents
     .factory('documentsResource', ['$resource', function ($resource) {
         var endpoint = '/documents';
         return $resource(endpoint, {id: '@id'}, {});
     }])
 
+    //Factory for getting document versions and parts of their content
     .factory('versionsResource', ['$resource', function ($resource) {
         var endpoint = '/versions';
         return $resource(endpoint, {id: '@id'}, {
@@ -25,6 +27,7 @@ angular.module('documents', ['ngResource', 'ngRoute'])
         });
     }])
 
+    //Main controller for document tabs
     .controller('documentsController', ['$scope', 'documentsResource', 'versionsResource',
         function ($scope, documentsResource, versionsResource) {
 
