@@ -111,22 +111,6 @@ angular.module('documents', ['ngResource', 'ngRoute'])
                 });
             };
 
-            //Add master scroll for added comporator
-            $scope.initMasterSlaveScroll = function () {
-                elements.on('scroll', function (e) {
-                    if (e.isTrigger) {
-                        e.target.scrollLeft = scrollLeft;
-                    } else {
-                        scrollLeft = e.target.scrollLeft;
-                        elements.each(function (element) {
-                            if (!this.isSameNode(e.target)) {
-                                $(this).trigger('scroll');
-                            }
-                        });
-                    }
-                });
-            };
-
             $scope.init();
 
         }])
