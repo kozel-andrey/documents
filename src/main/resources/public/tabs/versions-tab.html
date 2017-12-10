@@ -20,11 +20,11 @@
                 {{version.description}}
             </td>
             <td>
-                <button type="submit" class="btn btn-danger" ng-click="addToCompare(version)"
+                <button type="submit" class="btn btn-danger" ng-click="toggleVersion(version)"
                         ng-if="getAddedDoc(version) != undefined">
                     -
                 </button>
-                <button type="submit" class="btn btn-success" ng-click="addToCompare(version)"
+                <button type="submit" class="btn btn-success" ng-click="toggleVersion(version)"
                         ng-if="getAddedDoc(version) == undefined">
                     +
                 </button>

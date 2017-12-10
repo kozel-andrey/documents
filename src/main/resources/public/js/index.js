@@ -43,10 +43,17 @@ angular.module('documents', ['ngResource', 'ngRoute'])
                 });
             };
 
+            //Set active class for selected tab
             $scope.getClass = function (tabName) {
                 return $scope.tab == tabName ? 'active' : '';
             };
 
+            //Switch active tab
+            $scope.selectTab = function (tabName) {
+                $scope.tab = tabName;
+            };
+
+            //Get versions for selected document
             $scope.getVersions = function (doc) {
                 $scope.selectedDocument = doc;
                 versionsResource.getByDocument({id: doc.id}, function (versions) {
@@ -55,7 +62,8 @@ angular.module('documents', ['ngResource', 'ngRoute'])
                 });
             };
 
-            $scope.addToCompare = function (doc) {
+            //Add or remove document version from compare list
+            $scope.toggleVersion = function (doc) {
                 var added = $scope.getAddedDoc(doc);
                 if (added) {
                     $scope.compareList.splice($scope.compareList.indexOf(added), 1);
@@ -67,6 +75,7 @@ angular.module('documents', ['ngResource', 'ngRoute'])
                 }
             };
 
+            //Init document version comparator and loaded starting content
             $scope.initComparator = function (doc) {
                 var newDoc = {};
                 newDoc.doc = doc;
@@ -77,6 +86,7 @@ angular.module('documents', ['ngResource', 'ngRoute'])
                 $scope.loadPartForDocument(newDoc, newDoc.firstLine, 10);
             };
 
+            //Get added to list comparator by document version
             $scope.getAddedDoc = function (doc) {
                 var addedDoc = undefined;
 
@@ -87,6 +97,7 @@ angular.module('documents', ['ngResource', 'ngRoute'])
                 return addedDoc;
             };
 
+            //Load part of some version of document using selected offset and limit
             $scope.loadPartForDocument = function (newDoc, firstLine, linesCount) {
                 if (newDoc.totalLines >= firstLine + linesCount) return;
 
@@ -100,6 +111,7 @@ angular.module('documents', ['ngResource', 'ngRoute'])
                 });
             };
 
+            //Add master scroll for added comporator
             $scope.initMasterSlaveScroll = function () {
                 elements.on('scroll', function (e) {
                     if (e.isTrigger) {
@@ -115,40 +127,23 @@ angular.module('documents', ['ngResource', 'ngRoute'])
                 });
             };
 
-            $scope.selectTab = function (tabName) {
-                $scope.tab = tabName;
-            };
-
-            $scope.isActive = function (tabName) {
-                switch (tabName) {
-                    case 'DOCUMENTS':
-                    {
-                        return $scope.selectedDocument == undefined;
-                    }
-                    case 'VERSIONS':
-                    {
-                        return $scope.versions.length > 0;
-                    }
-                    case 'COMPARATOR':
-                    {
-                        return $scope.compareList.length > 0;
-                    }
-                }
-            };
-
             $scope.init();
 
         }])
 
     .directive('handleScroll', function () {
-
+        //Current position
         var scrollTop = 0;
+
         return {
             restrict: 'A',
             link: function (scope, element, attrs) {
-
+                //Panel body of document comparator
                 var doc = element[0];
 
+                //Bind scroll event to current element. On scroll select
+                // all comparators and scroll them (exclude current window)
+                // like a main window
                 $(doc).bind("scroll", function (e) {
                     if (e.isTrigger) {
                         e.target.scrollTop = scrollTop;
