@@ -22,9 +22,6 @@ public class DocumentVersion extends AbstractEntity {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "content")
-    private String text;
-
     public Document getDocument() {
         return document;
     }
@@ -39,14 +36,6 @@ public class DocumentVersion extends AbstractEntity {
 
     public void setDocumentVersion(String documentVersion) {
         this.documentVersion = documentVersion;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
     }
 
     public DocumentVersionDto getDto() {

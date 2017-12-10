@@ -65,8 +65,6 @@ angular.module('documents', ['ngResource', 'ngRoute'])
                         $scope.tab = 'COMPARATOR';
                     }
                 }
-
-                $scope.initMasterSlaveScroll();
             };
 
             $scope.initComparator = function (doc) {
@@ -90,6 +88,8 @@ angular.module('documents', ['ngResource', 'ngRoute'])
             };
 
             $scope.loadPartForDocument = function (newDoc, firstLine, linesCount) {
+                if (newDoc.totalLines >= firstLine + linesCount) return;
+
                 versionsResource.getParagraph({
                     id: newDoc.doc.id,
                     paragraphNumber: firstLine,
@@ -101,13 +101,13 @@ angular.module('documents', ['ngResource', 'ngRoute'])
             };
 
             $scope.initMasterSlaveScroll = function () {
-                elements.on('scroll', function(e){
-                    if(e.isTrigger){
+                elements.on('scroll', function (e) {
+                    if (e.isTrigger) {
                         e.target.scrollLeft = scrollLeft;
-                    }else {
+                    } else {
                         scrollLeft = e.target.scrollLeft;
                         elements.each(function (element) {
-                            if( !this.isSameNode(e.target) ){
+                            if (!this.isSameNode(e.target)) {
                                 $(this).trigger('scroll');
                             }
                         });
@@ -141,14 +141,28 @@ angular.module('documents', ['ngResource', 'ngRoute'])
         }])
 
     .directive('handleScroll', function () {
+
+        var scrollTop = 0;
         return {
             restrict: 'A',
             link: function (scope, element, attrs) {
 
                 var doc = element[0];
-                $(doc).bind("scroll", function () {
-                    if (doc.scrollTop + doc.offsetHeight >= doc.scrollHeight) {
-                        scope.$apply(attrs.handleScroll);
+
+                $(doc).bind("scroll", function (e) {
+                    if (e.isTrigger) {
+                        e.target.scrollTop = scrollTop;
+                    } else {
+                        scrollTop = e.target.scrollTop;
+                        var elements = angular.element('#comparator_tab_id').find('.master-slave');
+                        elements.each(function () {
+                            if (!this.isSameNode(e.target)) {
+                                $(this).trigger('scroll');
+                            }
+                        });
+                        if (doc.scrollTop + doc.offsetHeight >= doc.scrollHeight) {
+                            scope.$apply(attrs.handleScroll);
+                        }
                     }
                 });
             }

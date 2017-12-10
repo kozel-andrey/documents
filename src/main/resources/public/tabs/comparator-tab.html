@@ -1,11 +1,12 @@
-<div ng-if="tab == 'COMPARATOR'">
+<div ng-show="tab == 'COMPARATOR'">
     <div class="row" id="comparator_tab_id">
         <div class="col-md-6" ng-repeat="doc in compareList">
-            <div class="panel panel-success master-slave" style="margin-top: 40px">
+            <div class="panel panel-success" style="margin-top: 40px">
                 <div class="panel-heading">
                     {{doc.doc.description}}
                 </div>
-                <div class="panel-body" style="max-height: 200px; overflow-y:scroll;" handle-scroll="loadPartForDocument(doc, doc.totalLines, 10)">
+                <div class="panel-body master-slave" style="max-height: 200px; overflow-y:scroll;"
+                     handle-scroll="loadPartForDocument(doc, doc.totalLines, 10)" ng-focus="showDifference(doc)">
                     <div ng-repeat="paragraph in doc.content track by $index">{{paragraph}}</div>
                 </div>
             </div>
