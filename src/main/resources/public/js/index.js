@@ -121,6 +121,8 @@ angular.module('documents', ['ngResource', 'ngRoute'])
     .directive('handleScroll', function () {
         //Current position
         var scrollTop = 0;
+        var containerHeight = 200;
+        var lineHeight = 20;
 
         return {
             restrict: 'A',
@@ -128,7 +130,7 @@ angular.module('documents', ['ngResource', 'ngRoute'])
                 //Panel body of document comparator
                 var doc = element[0];
 
-                //Bind scroll event to current element. On scroll select
+                // Bind scroll event to current element. On scroll select
                 // all comparators and scroll them (exclude current window)
                 // like a main window
                 $(doc).bind("scroll", function (e) {
@@ -137,9 +139,13 @@ angular.module('documents', ['ngResource', 'ngRoute'])
                     } else {
                         scrollTop = e.target.scrollTop;
                         var elements = angular.element('#comparator_tab_id').find('.master-slave');
+                        var master = getLastNode(e.target);
                         elements.each(function () {
                             if (!this.isSameNode(e.target)) {
-                                $(this).trigger('scroll');
+                                var slave = getLastNode(this);
+                                if(isEqualContent(master, slave)) {
+                                    $(this).trigger('scroll');
+                                }
                             }
                         });
                         if (doc.scrollTop + doc.offsetHeight >= doc.scrollHeight) {
@@ -147,6 +153,28 @@ angular.module('documents', ['ngResource', 'ngRoute'])
                         }
                     }
                 });
+
+                var isEqualContent = function (master, slave) {
+                    if(master == slave) return true;
+                    if(!master || !slave) return false;
+                    return slave.text() == master.text();
+                };
+
+                var getLastNode = function (element) {
+                    var main = angular.element(element);
+                    var childs = main.find('div');
+                    var mainPosition = main.offset();
+                    var bottomSide = mainPosition.top + containerHeight;
+                    var result = undefined;
+                    angular.forEach(childs, function(children) {
+                        var childerElement = angular.element(children);
+                        var position = childerElement.offset();
+                        if ((position.top + lineHeight >= bottomSide) && !result) {
+                            result = childerElement;
+                        }
+                    });
+                    return result;
+                };
             }
         };
     });
